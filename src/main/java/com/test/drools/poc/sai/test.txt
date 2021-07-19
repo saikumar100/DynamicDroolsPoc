@@ -27,3 +27,14 @@
         kieSession.setGlobal(RuleConstants.DETAIL_LIST, opportunitiesDetailList);
         kieSession.insert(opportunityInput);
         kieSession.fireAllRules();
+  <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-ci</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-decisiontables</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
