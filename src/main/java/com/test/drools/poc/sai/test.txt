@@ -1,1 +1,29 @@
+ public KieContainer initializeDrools() {
+        KieServices kieServices = KieServices.Factory.get();
+        Resource dt
+                = ResourceFactory
+                .newClassPathResource(RuleConstants.RULES_XLSX_FILE_NAME,
+                        getClass());
 
+        KieFileSystem kieFileSystem = kieServices.newKieFileSystem().write(dt);
+        KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
+        kieBuilder.buildAll();
+        KieRepository kieRepository = kieServices.getRepository();
+        ReleaseId krDefaultReleaseId = kieRepository.getDefaultReleaseId();
+        Results results = kieBuilder.getResults();
+        if( results.hasMessages( Message.Level.ERROR ) ){
+            log.error ("{} errors from kie: {}", ProgramPerformanceUtil.TransactionIdLogger.getTransactionIdentifier (), results.getMessages ());
+            throw new IllegalStateException( "### errors ###" );
+        }
+
+        return kieServices.newKieContainer(krDefaultReleaseId);
+    }
+    
+     KieContainer kieContainer = initializeDrools();
+      KieSession kieSession = kieContainer.newKieSession();
+        kieSession.setGlobal(RuleConstants.SUMMARY, summary);
+        kieSession.setGlobal(RuleConstants.DETAIL, detail);
+        kieSession.setGlobal(RuleConstants.SUMMARY_LIST, opportunitiesSummaryList);
+        kieSession.setGlobal(RuleConstants.DETAIL_LIST, opportunitiesDetailList);
+        kieSession.insert(opportunityInput);
+        kieSession.fireAllRules();
