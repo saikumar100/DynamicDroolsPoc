@@ -38,3 +38,47 @@
             <artifactId>drools-decisiontables</artifactId>
             <version>${drools.version}</version>
         </dependency>
+        
+         List<List<RuleAction>> batchSizedList = ListUtils.partition(inputData, BATCH_SIZE);
+
+            for (List<RuleAction> dataBatchList : batchSizedList) {
+                if (!dataBatchList.isEmpty()) {
+                    log.info("== Sending Rule InputData to the Kie server ==");
+
+                    List<RuleAction> outList = new ArrayList<>();
+
+                    KieCommands commandsFactory = KieServices.Factory.get().getCommands();
+
+                    SetGlobalCommand setDetailListCommand = new SetGlobalCommand();
+                    setDetailListCommand.setIdentifier(DATA_LIST);
+                    setDetailListCommand.setObject(outList);
+                    setDetailListCommand.setOutIdentifier(DATA_LIST);
+
+                    //batch insertion
+                    List<Object> objects = new ArrayList<>(dataBatchList);
+                    Command<?> insertElementsCommand = commandsFactory.newInsertElements(objects);
+
+                    Command<?> fireAllRules = commandsFactory.newFireAllRules();
+                    Command<?> disposeCommand = commandsFactory.newDispose();
+
+                    BatchExecutionCommand batchExecutionCommand = commandsFactory.newBatchExecution(
+                            Arrays.asList(setDetailListCommand, insertElementsCommand, fireAllRules, disposeCommand));
+
+
+                    ServiceResponse<ExecutionResults> executeResponse = rulesClient.executeCommandsWithResults(containerId, batchExecutionCommand);
+
+                    if (executeResponse.getType() == KieServiceResponse.ResponseType.SUCCESS) {
+                        log.info("Received - Commands executed with success! Response: ");
+
+                        List<RuleAction> ruleBatchList=(List<RuleAction>) executeResponse.getResult().getValue(DATA_LIST);
+
+                        log.info("RuleBatchList size = {}", !ruleBatchList.isEmpty() ? ruleBatchList.size():" Empty Response");
+
+                        dataList.addAll(ruleBatchList);
+
+                    } else {
+                        log.info("Error executing rules. Message: ");
+                        log.error("Error Message: {}", executeResponse.getMsg());
+                    }
+                }
+            }
