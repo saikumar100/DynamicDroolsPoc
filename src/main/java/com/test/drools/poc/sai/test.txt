@@ -82,3 +82,63 @@
                     }
                 }
             }
+            
+            ---------------------
+            ./standalone.sh  -Dorg.uberfire.nio.git.hooks=/usr/local/local-hooks/ -b 0.0.0.0 -bmanagement 0.0.0.0 &
+
+./standalone.sh  -b 0.0.0.0 -bmanagement 0.0.0.0 &
+
+
+-Dorg.uberfire.nio.git.hooks=/usr/local/local-hooks/
+
+ssh <machine name>
+
+scp -r .niogit/. <machine name>:/usr/local/jbpm/bin/.niogit
+
+scp -r id_rsa.pub <machine name>:/app1/
+
+scp -r <machine name>:/app1/latest-jbpm/jbpm/bin/.niogit/  <machine name>:/app1/jbpm/bin/.niogit/
+
+
+sudo du -h /home | sort -rh | head -5
+
+ssh-keygen -t rsa -b 4096 -C "saisras100@gmail.com"
+
+
+cat ~/.ssh/id_rsa.pub | ssh remote_username@server_ip_address "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+
+cat ~/.ssh/id_rsa.pub | ssh remote_username@server_ip_addres  "cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+sudo df -h /home | sort -rh | head -5
+
+
+cat id_rsa.pub | mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+
+cat /app1/.ssh/ssh.pub | ssh remote_username@server_ip_addres "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+cat id_rsa.pub | ssh remote_username@server_ip_addres "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+cat ~/.ssh/id_rsa.pub | ssh remote_username@server_ip_addres "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+cat ~/.ssh/id_rsa.pub | ssh remote_username@server_ip_addres "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+
+max-post-size="26214400" 
+
+git config --global credential.helper store
+
+cat  ~/.git-credentials
+
+
+START KIE SERVER IN LOCAL
+>>go to wildfly-19.0.0.Final>>bin>> and run below command
+
+
+standalone.bat --server-config=standalone-full.xml -Dorg.kie.server.id=wildfly-kieserver -Dorg.kie.server.location=http://localhost:8080/kie-server/services/rest/server 
+-Dorg.kie.server.controller=http://localhost:8080/kie-wb/rest/controller
+
+
+http://localhost:8080/kie-wb/kie-wb.jsp
+
+
